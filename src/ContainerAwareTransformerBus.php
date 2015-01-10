@@ -3,6 +3,7 @@
 namespace Crell\TransformerBundle;
 
 use Crell\Transformer\NoTransformerFoundException;
+use Crell\Transformer\TransformerBus;
 use Crell\Transformer\TransformerBusInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -17,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  * FrameworkBundle\ControllerResolver. That code really ought to be factored
  * out to a separate class.
  */
-class ContainerAwareTransformerBus implements ContainerAwareInterface, TransformerBusInterface
+class ContainerAwareTransformerBus extends TransformerBus implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
@@ -50,28 +51,20 @@ class ContainerAwareTransformerBus implements ContainerAwareInterface, Transform
         $this->targetClass = $targetClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function transform($source)
-    {
-        $current = $source;
-        $current_class = get_class($current);
-
-        while ($current_class != $this->targetClass) {
-            if (empty($this->transformers[$current_class])) {
-                throw new NoTransformerFoundException(sprintf("No transformer registered for class '%s'", $current_class));
-            }
-            $current = $this->transformers[$current_class]($current);
-            $current_class = get_class($current);
-        }
-
-        return $current;
-    }
-
     public function setTransformer($class, $transformer)
     {
         $this->transformers[$class] = $transformer;
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    protected function getTransformer($class)
+    {
+        if (!isset($this->transformers[$class])) {
+            throw new NoTransformerFoundException(sprintf("No transformer registered for class '%s'", $class));
+        }
+        return $this->getInstantiatedTransformer($this->transformers[$class]);
     }
 
     /**
@@ -84,7 +77,7 @@ class ContainerAwareTransformerBus implements ContainerAwareInterface, Transform
      *
      * @throws \InvalidArgumentException
      */
-    public function getTransformer($transformer)
+    public function getInstantiatedTransformer($transformer)
     {
         if (is_array($transformer)) {
             return $transformer;

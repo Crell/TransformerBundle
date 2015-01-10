@@ -12,14 +12,30 @@
         }
     ],
     "autoload": {
-        "psr-4": {"Crell\\TransformerBundle\\": "src/"}
+        "psr-4": {
+            "Crell\\TransformerBundle\\": "src/",
+            "Crell\\TransformerBundle\\Tests\\": "tests/"
+        }
     },
     "require": {
-        "crell/transformer-bundle": "dev-master"
+        "symfony/dependency-injection": ">=2.3",
+        "crell/transformer": "dev-master"
     },
     "extra": {
         "branch-alias": {
             "dev-master": "master"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Crell/Transformer"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Crell/TransformerBundle"
+        }
+    ],
+    "minimum-stability": "dev"
+
 }
