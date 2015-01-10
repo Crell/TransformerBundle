@@ -1,0 +1,15 @@
+{
+    "name": "crell/transformer-bundle",
+    "description": "Symfony Bridge for the Crell Transformer library.",
+    "require-dev": {
+        "phpunit/phpunit": "~4.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Larry Garfield",
+            "email": "larry@garfieldtech.com"
+        }
+    ],
+    "require": {}
+}
