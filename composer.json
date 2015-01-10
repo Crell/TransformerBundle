@@ -11,5 +11,15 @@
             "email": "larry@garfieldtech.com"
         }
     ],
-    "require": {}
+    "autoload": {
+        "psr-4": {"Crell\\TransformerBundle\\": "src/"}
+    },
+    "require": {
+        "crell/transformer-bundle": "dev-master"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "master"
+        }
+    }
 }
