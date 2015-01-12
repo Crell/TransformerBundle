@@ -35,6 +35,11 @@ You will have to do that yourself, along with whatever configuration is appropri
 for your application.  (You can also, of course, register several different
 transformation pipelines for different use cases if appropriate.)
 
+A suggested usage is to register a single transformation bus as a `kernel::VIEW`
+listener.  That way, Controllers may return any number of different objects and
+they can all get folded down to a Response object with less overhead than
+registering a whole bunch of manually-ordered view listeners.
+
 ## Installation
 
 The preferred method of installation is via Composer with the following command:
