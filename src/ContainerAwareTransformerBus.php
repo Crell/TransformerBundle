@@ -23,18 +23,12 @@ class ContainerAwareTransformerBus extends TransformerBus implements ContainerAw
     use ContainerAwareTrait;
 
     /**
-     * We want an object of this class at the end of the day.
-     *
-     * @var string
-     */
-    protected $targetClass;
-
-    /**
-     * An associative array of callable transformers.
+     * An associative array of transformers.
      *
      * The key is the class name the transformer will handle, and the value
-     * is a PHP callable that can convert objects of that class to something
-     * else.
+     * is a Symfony "extended" PHP callable (which includes PHP callables as
+     * well as the service:method and ClassToInstantaite::method formats) that
+     * can convert objects of that class to something else.
      *
      * @var array
      */
@@ -48,9 +42,17 @@ class ContainerAwareTransformerBus extends TransformerBus implements ContainerAw
      */
     public function __construct($targetClass)
     {
-        $this->targetClass = $targetClass;
+        parent::__construct($targetClass);
     }
 
+    /**
+     * Sets the transformer for a specified type.
+     *
+     * @param string $class
+     *   The class this transformer can handle.
+     * @param callable|string $transformer
+     *   A Symfony callable that will transform an object of type $class to something else.
+     */
     public function setTransformer($class, $transformer)
     {
         $this->transformers[$class] = $transformer;
